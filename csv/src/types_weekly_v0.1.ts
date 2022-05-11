@@ -42,7 +42,6 @@ export interface CoinData {
   totalInterestInOriginalInterestCoin: string;
 }
 
-
 export interface CoinDataMap {
   version: number;
   data: CoinData[];
@@ -59,14 +58,6 @@ export interface PortfolioEntry {
   collaterals_unlocked: string;
   withdrawals: string;
   deposits: string;
-  swap_out: string;
-  swap_in: string;
-  loan_out: string;
-  loan_in: string;
-  transfer_out: string;
-  transfer_in: string;
-  interest_pay: string;
-  awards: string;
 }
 
 export interface RankingsLevels {

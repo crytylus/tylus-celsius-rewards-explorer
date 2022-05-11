@@ -6,7 +6,7 @@ import {
   onLineReaderClose,
   preprocessCsvRow,
   processIndividualUserRewardsRecord,
-} from "./csv-utils_portfolio";
+} from "./csv-utils";
 
 // Read command arguments
 const commandArgument = process.argv[2];

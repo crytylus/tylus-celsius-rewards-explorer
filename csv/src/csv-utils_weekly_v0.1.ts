@@ -142,14 +142,6 @@ export const processIndividualUserRewardsRecord = (
       collaterals_unlocked: "0",
       withdrawals: "0",
       deposits: "0",
-      swap_out: "0",
-      swap_in: "0",
-      loan_out: "0",
-      loan_in: "0",
-      transfer_out: "0",
-      transfer_in: "0",
-      interest_pay: "0",
-      awards: "0",
     };
 
     // Initialize coin distribution if it does not exist yet
@@ -206,74 +198,8 @@ export const processIndividualUserRewardsRecord = (
       }
     }
   }
-    // Add up all swap out
-    let totalswap_out = new BigNumber("0");
-    for (const entry of distribution) {
-      const { type, value } = entry;
-      const amount = new BigNumber(value);
-      if (type === "swap_out") {
-          totalswap_out = totalswap_out.plus(amount);
-    }
-  }
-    // Add up all swap in
-    let totalswap_in = new BigNumber("0");
-    for (const entry of distribution) {
-      const { type, value } = entry;
-      const amount = new BigNumber(value);
-      if (type === "swap_in") {
-          totalswap_in = totalswap_in.plus(amount);
-    }
-  }
-    // Add up all interest payments
-    let totalinterestpay = new BigNumber("0");
-    for (const entry of distribution) {
-      const { type, value } = entry;
-      const amount = new BigNumber(value);
-      if (type === "loan_interest_payment") {
-        totalinterestpay = totalinterestpay.plus(amount);
-    }
-  }
-    // Add up all transfer in
-    let totaltransfer_in = new BigNumber("0");
-    for (const entry of distribution) {
-      const { type, value } = entry;
-      const amount = new BigNumber(value);
-      if (type === "inbound_transfer") {
-        totaltransfer_in = totaltransfer_in.plus(amount);
-    }
-  }
-    // Add up all transfer out
-    let totaltransfer_out = new BigNumber("0");
-    for (const entry of distribution) {
-      const { type, value } = entry;
-      const amount = new BigNumber(value);
-      if (type === "outbound_transfer") {
-        totaltransfer_out = totaltransfer_out.plus(amount);
-    }
-  }
-    // Add up all loans 
-    let totalLoan_out = new BigNumber("0");
-    for (const entry of distribution) {
-      const { type, value } = entry;
-      const amount = new BigNumber(value);
-      if (type === "loan_principal_payment") {
-        if (amount.gt("0")) {
-          totalLoan_out = totalLoan_out.plus(amount);
-      }
-    }
-  }
-    // Add up all loans
-    let totalLoan_in = new BigNumber("0");
-    for (const entry of distribution) {
-      const { type, value } = entry;
-      const amount = new BigNumber(value);
-      if (type === "loan_principal_payment") {
-        if (amount.lt("0")) {
-          totalLoan_in = totalLoan_in.plus(amount);
-      }
-    }
-  }
-  // Add up all withdrawal
+
+    // Add up all withdrawal
     let totalWithdrawal = new BigNumber("0");
     for (const entry of distribution) {
       const { type, value } = entry;
@@ -307,15 +233,6 @@ export const processIndividualUserRewardsRecord = (
     const amount = new BigNumber(value);
     if (type === "initialBalance") {
       startBalance = amount;
-    }
-  }
-  // Add up all awards
-  let totalAwards = new BigNumber("0");
-  for (const entry of distribution) {
-    const { type, value } = entry;
-    const amount = new BigNumber(value);
-    if (type === "referred_award" || type === "referrer_award" || type === "promo_code_reward"|| type === "bonus_token" ) {
-      totalAwards = totalAwards.plus(amount);
     }
   }
     // Add balance to the corresponding coin distribution
@@ -365,30 +282,6 @@ export const processIndividualUserRewardsRecord = (
         .toString(),
       collaterals_unlocked: totalunlockedCollateral
         .plus(existingCoin.collaterals_unlocked)
-        .toString(),
-      swap_out: totalswap_out
-        .plus(existingCoin.swap_out)
-        .toString(),
-      swap_in: totalswap_in
-        .plus(existingCoin.swap_in)
-        .toString(),
-      loan_out: totalLoan_out
-        .plus(existingCoin.loan_out)
-        .toString(),
-      loan_in: totalLoan_in
-        .plus(existingCoin.loan_in)
-        .toString(),
-      transfer_out: totaltransfer_in
-        .plus(existingCoin.transfer_out)
-        .toString(),
-      transfer_in: totaltransfer_out
-        .plus(existingCoin.transfer_in)
-        .toString(),
-      interest_pay: totalinterestpay
-        .plus(existingCoin.interest_pay)
-        .toString(),
-      awards: totalAwards
-        .plus(existingCoin.awards)
         .toString(),
     };
 
@@ -528,7 +421,7 @@ export const onLineReaderClose = (
 
     // Take only the top 100. There are too many holders and the top 1-3
     // whales skew the entire list anyway.
-    const TOP_HOLDERS_LIMIT = 0;
+    const TOP_HOLDERS_LIMIT = 500000;
 
     metrics.coinDistributions[coin] = sortedValues.slice(0, TOP_HOLDERS_LIMIT);
   }
